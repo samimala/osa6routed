@@ -1,20 +1,54 @@
 import React from 'react'
 import {BrowserRouter as Router, Link, NavLink, Route, Redirect} from 'react-router-dom'
-import { Container, Table, Grid, Image } from 'semantic-ui-react'
+import { Container, Table, Grid, Image, Menu } from 'semantic-ui-react'
 
-const Menu = () => {
-  const menuStyle = {
-    backgroundColor: 'lightblue',
-    color: 'black',
-    fontSize: 25
-  }  
-  return(
-    <div style = {menuStyle}>     
-      <NavLink activeStyle={{color: 'red'}} exact to='/'>anecdotes</NavLink>&nbsp;
-      <NavLink activeStyle={{color: 'red'}} exact to='/create'>create new</NavLink>&nbsp;
-      <NavLink activeStyle={{color: 'red'}} exact to='/about'>about</NavLink>&nbsp;
-    </div>
-  )
+class MenuSemantic extends React.Component {
+  state = {}
+
+  menuStyle = {
+    backgroundColor: 'darkblue',
+    color: 'white',
+    fontSize: 20
+    }  
+    
+  handleItemClick = (e, {name}) => {
+    console.log('onClick: ', e)
+    this.setState({activeItem: name})
+  }
+
+  activeStyle = (active) => ({ color: active?"red":"white" })
+
+  render() {
+    const activeItem = this.state
+    return(
+      <Menu inverted style={this.menuStyle}>
+        <Menu.Item
+          as={Link}
+          name="anecdotes"
+          to='/'
+          onClick={this.handleItemClick}
+          style={{color: this.state.activeItem==="anecdotes"?"red":"white"}}>
+          Anecdotes
+        </Menu.Item>
+        <Menu.Item
+          as={Link}
+          name="create new"
+          to='/create'
+          onClick={this.handleItemClick}
+          style={{color: this.state.activeItem==="create new"?"red":"white"}}>
+          Create new
+        </Menu.Item>
+        <Menu.Item
+          as={Link}
+          name="about"
+          to='/about'
+          onClick={this.handleItemClick}
+          style={{color: this.state.activeItem==="about"?"red":"white"}}>
+          About
+        </Menu.Item>
+      </Menu>
+    )
+  }
 }
 
 const AnecdoteList = ({ anecdotes }) => (
@@ -53,11 +87,35 @@ const Notification = ({text}) => {
 
 const OneAnecdote = ({anecdote}) => {
   return (
-    <div>
-      <h2>{anecdote.content} by {anecdote.author}</h2>
-      <p>has {anecdote.votes} votes</p>
-      <p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p>
-    </div>
+    <Grid columns={2}>
+      <Grid.Row>
+        <Grid.Column>
+          <h2>{anecdote.content} by {anecdote.author}</h2>
+        </Grid.Column>
+        <Grid.Column>
+          <Table>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell>
+                  VOTES
+                </Table.Cell>
+              </Table.Row>
+              <Table.Row style={{fontSize:30, color: 'green'}}>
+                <Table.Cell>
+                {anecdote.votes}
+                </Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
+        </Grid.Column>
+      </Grid.Row>
+
+      <Grid.Row>
+        <Grid.Column>
+          <p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   )
 }
 
@@ -202,7 +260,7 @@ class App extends React.Component {
         <h1>Software anecdotes</h1>
           <Router>
             <div>
-              <Menu />
+              <MenuSemantic />
               <Notification text={this.state.notification}/>
               <Route exact path="/" render={()=> <AnecdoteList anecdotes={this.state.anecdotes} />} />
               <Route exact path="/about" render={()=><About /> } />
