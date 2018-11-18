@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter as Router, Link, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Link, Route, Redirect} from 'react-router-dom'
 
 const Menu = () => (
   <div>    
@@ -22,11 +22,22 @@ const AnecdoteList = ({ anecdotes }) => (
   </div>
 )
 
-const Notification = ({text}) => (
-  <div>
-    {text}
-  </div>
-)
+
+const Notification = ({text}) => {
+  const notifyStyle = {
+    color: 'red',
+    fontStyle: 'bold',
+    marginLeft: 15,
+    fontSize: 20
+  }
+  
+  return (
+      <div style={notifyStyle}>
+      {text}
+    </div>
+  )
+}
+
 
 const OneAnecdote = ({anecdote}) => {
   return (
@@ -111,6 +122,7 @@ class CreateNew extends React.Component {
   }
 }
 
+  
 class App extends React.Component {
   constructor() {
     super()
