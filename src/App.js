@@ -1,5 +1,6 @@
 import React from 'react'
 import {BrowserRouter as Router, Link, NavLink, Route, Redirect} from 'react-router-dom'
+import { Container, Table } from 'semantic-ui-react'
 
 const Menu = () => {
   const menuStyle = {
@@ -19,13 +20,17 @@ const Menu = () => {
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => 
-        <li key={anecdote.id} >
-          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
-        </li>
-      )}
-    </ul>  
+    <Table>
+      <Table.Body>
+        {anecdotes.map(anecdote => 
+          <Table.Row key={anecdote.id}>
+            <Table.Cell >
+              <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+            </Table.Cell>
+          </Table.Row>
+        )}
+      </Table.Body>
+    </Table>  
   </div>
 )
 
@@ -183,7 +188,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <h1>Software anecdotes</h1>
           <Router>
             <div>
@@ -196,7 +201,7 @@ class App extends React.Component {
             </div>  
           </Router>
         <Footer />
-      </div>
+      </Container>
     );
   }
 }
